@@ -31,7 +31,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import  androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fintrack.fintrackforandroid.R
 import com.fintrack.fintrackforandroid.ui.theme.FinTrackForAndroidTheme
@@ -64,6 +64,7 @@ fun ForgotPasswordScreen()
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
