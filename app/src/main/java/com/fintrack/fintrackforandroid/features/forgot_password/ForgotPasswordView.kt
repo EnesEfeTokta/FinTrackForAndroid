@@ -1,4 +1,4 @@
-package com.fintrack.fintrackforandroid.features.otpVerification
+package com.fintrack.fintrackforandroid.features.forgot_password
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -30,81 +29,65 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import  androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fintrack.fintrackforandroid.R
 import com.fintrack.fintrackforandroid.ui.theme.FinTrackForAndroidTheme
 
 @Composable
-fun OtpVerificationScreen()
+fun ForgotPasswordScreen()
 {
-    var inputCode by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier 
+        modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .background(Color(0xff0a0e14))
             .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_otp_verification),
-            contentDescription = "Otp Verification Illustration",
+            painter = painterResource(id = R.drawable.ic_message),
+            contentDescription = "Forgot Password Illustration",
             modifier = Modifier.size(150.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Verification Code",
+            text = "Forgot Password",
             color = Color.White,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
-
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Enter the verification code to continue",
+            text = "Verify that you are who you say you are",
             color = Color.Gray,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
-            value = inputCode,
-            onValueChange = {
-                if (it.all { char -> char.isDigit() } && it.length <= 6)
-                {
-                    inputCode = it
-                }
-            },
+            value = email,
+            onValueChange = { email = it },
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("CODE") },
+            label = { Text("EMAIL") },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-            colors = getTextFieldColors(),
-            trailingIcon = {
-                Text(
-                    text = "5:00",
-                    color = Color.Red,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            }
+            colors = getTextFieldColors()
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { /* TODO: Doğrulama işlemini tetikle */ },
+            onClick = { /* TODO: Şifre yenileme işlemini tetikle */ },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -114,12 +97,12 @@ fun OtpVerificationScreen()
                 contentColor = Color.White
             )
         ) {
-            Text(text = "VERIFY", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "CODE SEND", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        ResendText()
+        LoginText()
     }
 }
 
@@ -135,14 +118,15 @@ private fun getTextFieldColors() = OutlinedTextFieldDefaults.colors(
 )
 
 @Composable
-private fun ResendText() {
+private fun LoginText() {
     val annotatedString = buildAnnotatedString {
         withStyle(style = SpanStyle(color = Color.Gray, fontSize = 14.sp)) {
-            append("Didn't you receive the code? ")
+            append("Do you remember your password? ")
         }
-        pushStringAnnotation(tag = "OtpVerification", annotation = "OtpVerification")
+        // "Sign Up" kısmına tıklanabilirlik için bir etiket ekliyoruz
+        pushStringAnnotation(tag = "Login", annotation = "Login")
         withStyle(style = SpanStyle(color = Color(0xFF1DB954), fontSize = 14.sp, fontWeight = FontWeight.Bold)) {
-            append("Resend")
+            append("Login")
         }
         pop()
     }
@@ -150,9 +134,10 @@ private fun ResendText() {
     ClickableText(
         text = annotatedString,
         onClick = { offset ->
-            annotatedString.getStringAnnotations(tag = "OtpVerification", start = offset, end = offset)
+            annotatedString.getStringAnnotations(tag = "SignUp", start = offset, end = offset)
                 .firstOrNull()?.let {
-                    println("Resend 'e tıklandı!")
+                    // "Sign Up" metnine tıklandığında yapılacak işlem
+                    println("Login 'e tıklandı!")
                     // TODO: Kayıt ekranına yönlendir
                 }
         }
@@ -161,8 +146,8 @@ private fun ResendText() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun OtpVerificationScreenPreview() {
+fun ForgotPasswordScreenPreview() {
     FinTrackForAndroidTheme {
-        OtpVerificationScreen()
+        ForgotPasswordScreen()
     }
 }
