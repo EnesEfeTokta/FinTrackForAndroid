@@ -131,7 +131,7 @@ fun LoginScreen()
 
 @Composable
 private fun getTextFieldColors() = OutlinedTextFieldDefaults.colors(
-    focusedBorderColor = Color(0xFF1DB954),
+    focusedBorderColor = Color(0xFF84F5AC),
     unfocusedBorderColor = Color.Gray,
     focusedLabelColor = Color.White,
     unfocusedLabelColor = Color.Gray,
