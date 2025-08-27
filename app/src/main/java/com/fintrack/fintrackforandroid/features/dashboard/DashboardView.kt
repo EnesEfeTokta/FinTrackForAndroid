@@ -65,9 +65,6 @@ fun HomeScreen() {
         // Bakiye Kartı
         item { BalanceCard() }
 
-        // Aksiyon Kartları (All Accounts, All Budgets vb.)
-        // Gerçek bir projede bu resimleri internetten veya drawable klasöründen yüklersiniz.
-        // Şimdilik yer tutucu kullanıyoruz.
         item { ActionCard(title = "All Accounts", imagePainter = painterResource(id = R.drawable.bg_credit_card)) }
         item { ActionCard(title = "All Budgets", imagePainter = painterResource(id = R.drawable.bg_budget)) }
         item { ActionCard(title = "All Transactions", imagePainter = painterResource(id = R.drawable.bg_transaction)) }
