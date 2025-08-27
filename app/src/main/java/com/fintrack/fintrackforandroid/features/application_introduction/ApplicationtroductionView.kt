@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,38 +30,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fintrack.fintrackforandroid.ui.theme.FinTrackForAndroidTheme
 import com.fintrack.fintrackforandroid.R
 
-data class SlideData(
-    val imageRes: Int,
-    val head: String,
-    val body: String
-)
-
-val slides = listOf(
-    SlideData(
-        imageRes = R.drawable.ic_message,
-        head = "FinTrack'e Hoş Geldiniz",
-        body = "Tüm finansal işlemlerinizi tek bir yerden kolayca yönetin."
-    ),
-    SlideData(
-        imageRes = R.drawable.ic_message,
-        head = "Bütçenizi Planlayın",
-        body = "Harcamalarınızı takip ederek hedeflerinize daha hızlı ulaşın."
-    ),
-    SlideData(
-        imageRes = R.drawable.ic_message,
-        head = "Raporları İnceleyin",
-        body = "Anlaşılır grafiklerle finansal durumunuzu anında görün."
-    )
-)
-
 @Composable
-fun ApplicationtroductionScreen()
+fun ApplicationtroductionScreen(
+    viewModel: ApplicationIntroductionViewModel = viewModel()
+)
 {
-    var currentSlideIndex by remember { mutableStateOf(0) }
-    val currentSlide = slides[currentSlideIndex]
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -75,7 +54,7 @@ fun ApplicationtroductionScreen()
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = currentSlide.imageRes),
+                painter = painterResource(id = uiState.currentSlide.imageRes),
                 contentDescription = "Slide Illustration",
                 modifier = Modifier.size(150.dp)
             )
@@ -83,7 +62,7 @@ fun ApplicationtroductionScreen()
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = currentSlide.head,
+                text = uiState.currentSlide.head,
                 color = Color.White,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
@@ -92,7 +71,7 @@ fun ApplicationtroductionScreen()
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = currentSlide.body,
+                text = uiState.currentSlide.body,
                 color = Color.Gray,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal
@@ -111,13 +90,8 @@ fun ApplicationtroductionScreen()
                     )
                 ) {
                     Button(
-                        /* TODO: Burası iş mantığı katmamında olacak. */
-                        onClick = {
-                            if (currentSlideIndex > 0) {
-                                currentSlideIndex--
-                            }
-                        },
-                        enabled = currentSlideIndex > 0,
+                        onClick = { viewModel.onBackClicked() },
+                        enabled = uiState.isBackButtonEnabled,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Red,
                             contentColor = Color.White,
@@ -129,21 +103,14 @@ fun ApplicationtroductionScreen()
                     }
 
                     Button(
-                        /* TODO: Burası iş mantığı katmamında olacak. */
-                        onClick = {
-                            if (currentSlideIndex < slides.lastIndex) {
-                                currentSlideIndex++
-                            } else {
-                                // İleri işlemi...
-                            }
-                        },
+                        onClick = { viewModel.onNextClicked() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF1DB954),
                             contentColor = Color.White
                         )
                     ) {
                         val buttonText =
-                            if (currentSlideIndex == slides.lastIndex) "Başla" else "İleri"
+                            if (uiState.isLastSlide) "Başla" else "İleri"
                         Text(buttonText, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     }
                 }
@@ -157,7 +124,7 @@ fun ApplicationtroductionScreen()
                     .height(48.dp)
             ) {
                 TextButton(
-                    onClick = { /* TODO: Tanıtımı atla... */ },
+                    onClick = { viewModel.onSkipClicked() },
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
                     Text(text = "Atla", color = Color(0xFF1E88E5), fontSize = 16.sp)
